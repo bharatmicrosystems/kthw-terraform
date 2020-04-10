@@ -1,0 +1,12 @@
+masters=$1
+workers=$2
+#Worker
+for instance in $(echo $workers | tr ',' ' '); do
+  ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
+  gcloud compute scp --zone=$ZONE ${instance}.kubeconfig kube-proxy.kubeconfig ${instance}:~/
+done
+#Master
+for instance in $(echo $masters | tr ',' ' '); do
+  ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
+  gcloud compute scp --zone=$ZONE admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig ${instance}:~/
+done
