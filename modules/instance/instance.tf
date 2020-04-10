@@ -22,13 +22,3 @@ resource "google_compute_instance" "main" {
 
   allow_stopping_for_update = true
 }
-
-resource "google_compute_firewall" "default" {
-  name    = "allow-tcp"
-  network = "default"
-  source_ranges = var.source_ranges
-  allow {
-    protocol = "tcp"
-    ports    = var.tcp_ports
-  }
-}

@@ -6,8 +6,6 @@ module "master01" {
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
   startup_script = ""
-  source_ranges = []
-  tcp_ports = []
 }
 module "master02" {
   source        = "./modules/instance"
@@ -17,8 +15,6 @@ module "master02" {
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
   startup_script = ""
-  source_ranges = []
-  tcp_ports = []
 }
 module "master03" {
   source        = "./modules/instance"
@@ -28,8 +24,6 @@ module "master03" {
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
   startup_script = ""
-  source_ranges = []
-  tcp_ports = []
 }
 
 module "node01" {
@@ -40,8 +34,6 @@ module "node01" {
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
   startup_script = ""
-  source_ranges = []
-  tcp_ports = []
 }
 
 module "node02" {
@@ -52,8 +44,6 @@ module "node02" {
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
   startup_script = ""
-  source_ranges = []
-  tcp_ports = []
 }
 
 module "masterlb" {
@@ -64,6 +54,10 @@ module "masterlb" {
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
   startup_script = ""
+}
+
+module "firewall" {
+  source        = "./modules/firewall"
   source_ranges = var.source_ranges
   tcp_ports = var.tcp_ports
 }
