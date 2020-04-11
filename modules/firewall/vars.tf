@@ -4,3 +4,7 @@ variable "source_ranges" {
 variable "tcp_ports" {
   type    = list(string)
 }
+variable "name" {}
+variable "target_tags" {
+  type    = list(string)
+}

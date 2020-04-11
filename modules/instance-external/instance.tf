@@ -13,11 +13,13 @@ resource "google_compute_instance" "main" {
 
   network_interface {
     subnetwork = var.subnet_name
+    access_config {
+    }
   }
   metadata_startup_script = var.startup_script
 
   service_account {
-    scopes = ["storage-rw"]
+    scopes = var.scopes
   }
 
   allow_stopping_for_update = true
