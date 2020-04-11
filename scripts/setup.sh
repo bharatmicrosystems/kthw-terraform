@@ -14,6 +14,9 @@ sleep 5
 echo 'Setting up kubeconfig'
 sh -x generate-kubeconfig.sh $workers $loadbalancer
 sleep 5
+echo 'Setting up NGINX Load Balancer'
+sh -x setup-nginx.sh $loadbalancer
+sleep 5
 echo 'Distributing certs'
 sh -x distribute-certs.sh $masters $workers
 sleep 5
@@ -31,9 +34,6 @@ sh -x setup-master.sh $masters
 sleep 5
 echo 'Setting up RBAC'
 sh -x setup-rbac.sh $masters
-sleep 5
-echo 'Setting up NGINX Load Balancer'
-sh -x setup-nginx.sh $loadbalancer
 sleep 5
 echo 'Setting up Worker nodes'
 sh -x setup-worker.sh $workers
