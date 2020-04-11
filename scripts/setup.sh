@@ -30,10 +30,10 @@ echo 'Setting up etcd'
 sh -x setup-etcd.sh $masters
 sleep 1
 echo 'Setting up Control Plane'
-sh -x setup-master.sh $masters
+sh -x setup-master.sh $masters $loadbalancer
 sleep 1
 echo 'Setting up RBAC'
-sh -x setup-rbac.sh $masters $loadbalancer
+sh -x setup-rbac.sh $masters
 sleep 1
 echo 'Setting up Worker nodes'
 sh -x setup-worker.sh $workers
