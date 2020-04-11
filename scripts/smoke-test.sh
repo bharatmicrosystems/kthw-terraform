@@ -25,8 +25,13 @@ curl -I node02:$NODEPORT
 sleep 10
 kubectl logs $POD_NAME
 sleep 2
-kubectl exec -it $POD_NAME -- nslookup nginx
+kubectl run busybox --image=busybox:1.28 --command -- sleep 3600
+kubectl get pods
+POD_NAME=$(kubectl get pods -l run=busybox -o jsonpath="{.items[0].metadata.name}")
+sleep 10
+kubectl exec -ti $POD_NAME -- nslookup kubernetes
 sleep 2
 kubectl delete secret kubernetes-the-hard-way
 kubectl delete svc nginx
 kubectl delete deployment nginx
+kubectl delete deployment busybox
