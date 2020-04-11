@@ -11,7 +11,7 @@ kubectl run nginx --image=nginx
 sleep 10
 kubectl get pods -l run=nginx
 #POD_NAME=$(kubectl get pods -l run=nginx -o jsonpath="{.items[0].metadata.name}")
-#nohup kubectl port-forward $POD_NAME 8081:80 &
+#kubectl port-forward $POD_NAME 8081:80
 #curl --head http://127.0.0.1:8081
 #sleep 10
 POD_NAME=$(kubectl get pods -l run=nginx -o jsonpath="{.items[0].metadata.name}")
