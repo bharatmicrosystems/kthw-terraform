@@ -113,7 +113,7 @@ module "master-etcd" {
   source        = "./modules/firewall"
   source_ranges = []
   source_tags = ["k8smaster"]
-  tcp_ports = ["10250-10252"]
+  tcp_ports = ["2379-2380"]
   target_tags = ["k8smaster"]
 }
 
@@ -127,7 +127,7 @@ module "allow-ssh-from-bastion" {
 }
 
 module "worker-kubelet" {
-  name        = "worker"
+  name        = "worker-kubelet"
   source        = "./modules/firewall"
   source_ranges = []
   source_tags = ["k8smaster"]
@@ -136,7 +136,7 @@ module "worker-kubelet" {
 }
 
 module "worker-nodeport" {
-  name        = "worker"
+  name        = "worker-nodeport"
   source        = "./modules/firewall"
   source_ranges = []
   source_tags = ["k8sloadbalancer"]
