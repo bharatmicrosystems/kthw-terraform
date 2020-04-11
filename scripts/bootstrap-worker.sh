@@ -1,5 +1,4 @@
 {
-  sudo yum -y update
   sudo yum -y install socat conntrack ipset wget
 }
 sudo swapoff -a
@@ -132,4 +131,3 @@ EOF
   sudo systemctl enable docker kubelet kube-proxy
   sudo systemctl start docker kubelet kube-proxy
 }
-
