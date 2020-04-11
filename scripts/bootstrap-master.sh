@@ -1,3 +1,4 @@
+INTERNAL_IP=$1
 sudo mkdir -p /etc/kubernetes/config
 wget \
   "https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kube-apiserver" \
@@ -17,8 +18,6 @@ wget \
     service-account-key.pem service-account.pem \
     encryption-config.yaml /var/lib/kubernetes/
 }
-INTERNAL_IP=$(curl -s -H "Metadata-Flavor: Google" \
-  http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
 cat <<EOF | sudo tee /etc/systemd/system/kube-apiserver.service
 [Unit]
 Description=Kubernetes API Server

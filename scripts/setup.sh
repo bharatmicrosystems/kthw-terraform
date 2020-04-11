@@ -33,7 +33,7 @@ echo 'Setting up Control Plane'
 sh -x setup-master.sh $masters
 sleep 5
 echo 'Setting up RBAC'
-sh -x setup-rbac.sh $masters
+sh -x setup-rbac.sh $masters $loadbalancer
 sleep 5
 echo 'Setting up Worker nodes'
 sh -x setup-worker.sh $workers

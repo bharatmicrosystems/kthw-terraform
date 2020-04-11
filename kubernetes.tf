@@ -105,7 +105,7 @@ module "master-apiserver" {
   name        = "master-apiserver"
   source        = "./modules/firewall"
   source_ranges = []
-  source_tags = ["k8sloadbalancer","k8sworker"]
+  source_tags = ["k8sloadbalancer"]
   tcp_ports = ["6443"]
   udp_ports = []
   target_tags = ["k8smaster"]
