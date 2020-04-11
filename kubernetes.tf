@@ -87,6 +87,7 @@ module "api-server-6443" {
   source_ranges = var.source_ranges
   source_tags = ["k8sworker","k8smaster"]
   tcp_ports = ["6443"]
+  udp_ports = []
   target_tags = ["k8sloadbalancer"]
 }
 
@@ -96,6 +97,7 @@ module "bastion-ssh" {
   source_ranges = var.source_ranges
   source_tags = []
   tcp_ports = ["22"]
+  udp_ports = []
   target_tags = ["bastion"]
 }
 
@@ -103,8 +105,9 @@ module "master-apiserver" {
   name        = "master-apiserver"
   source        = "./modules/firewall"
   source_ranges = []
-  source_tags = ["k8sloadbalancer"]
+  source_tags = ["k8sloadbalancer","k8sworker"]
   tcp_ports = ["6443"]
+  udp_ports = []
   target_tags = ["k8smaster"]
 }
 
@@ -114,6 +117,7 @@ module "master-etcd" {
   source_ranges = []
   source_tags = ["k8smaster"]
   tcp_ports = ["2379-2380"]
+  udp_ports = []
   target_tags = ["k8smaster"]
 }
 
@@ -124,6 +128,7 @@ module "allow-ssh-from-bastion" {
   source_tags = ["bastion"]
   target_tags = []
   tcp_ports = ["22"]
+  udp_ports = []
 }
 
 module "worker-kubelet" {
@@ -132,6 +137,7 @@ module "worker-kubelet" {
   source_ranges = []
   source_tags = ["k8smaster"]
   tcp_ports = ["10250"]
+  udp_ports = []
   target_tags = ["k8sworker"]
 }
 
@@ -139,7 +145,18 @@ module "worker-nodeport" {
   name        = "worker-nodeport"
   source        = "./modules/firewall"
   source_ranges = []
-  source_tags = ["k8sloadbalancer"]
+  source_tags = ["k8sloadbalancer","k8smaster"]
   tcp_ports = ["30000-32767"]
+  udp_ports = []
+  target_tags = ["k8sworker"]
+}
+
+module "worker-allow-weave-coredns" {
+  name        = "worker-allow-weave-coredns"
+  source        = "./modules/firewall"
+  source_ranges = []
+  source_tags = ["k8sworker"]
+  tcp_ports = ["6781-6783"]
+  udp_ports = ["6783","6784"]
   target_tags = ["k8sworker"]
 }

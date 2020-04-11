@@ -110,4 +110,3 @@ done
 
   kubectl config use-context default --kubeconfig=admin.kubeconfig
 }
-

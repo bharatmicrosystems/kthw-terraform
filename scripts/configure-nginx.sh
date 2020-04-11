@@ -11,8 +11,8 @@ sudo cat << EOF | sudo tee /etc/nginx/tcpconf.d/kubernetes.conf
 stream {
     upstream kubernetes {
         server master01:6443;
+	      server master03:6443;
         server master02:6443;
-	server master03:6443;
     }
 
     server {
