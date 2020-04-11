@@ -8,3 +8,6 @@ variable "name" {}
 variable "target_tags" {
   type    = list(string)
 }
+variable "source_tags" {
+  type    = list(string)
+}
