@@ -51,15 +51,15 @@ cat > ${instance}-csr.json <<EOF
 }
 EOF
 ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
-EXTERNAL_IP=$(gcloud compute instances describe --zone=$ZONE ${instance} --zone=$ZONE\
-  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
+#EXTERNAL_IP=$(gcloud compute instances describe --zone=$ZONE ${instance} --zone=$ZONE\
+#  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
 INTERNAL_IP=$(gcloud compute instances describe --zone=$ZONE ${instance} \
   --format 'value(networkInterfaces[0].networkIP)')
 cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=${instance},${EXTERNAL_IP},${INTERNAL_IP} \
+  -hostname=${instance},${INTERNAL_IP} \
   -profile=kubernetes \
   ${instance}-csr.json | cfssljson -bare ${instance}
 done

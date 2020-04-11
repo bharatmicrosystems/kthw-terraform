@@ -15,5 +15,5 @@ resources:
 EOF
 for instance in $(echo $masters | tr ',' ' '); do
   ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
-  gcloud compute scp --zone=$ZONE encryption-config.yaml ${instance}:~/
+  gcloud compute scp --zone=$ZONE --internal-ip encryption-config.yaml ${instance}:~/
 done
