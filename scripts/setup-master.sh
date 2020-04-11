@@ -1,5 +1,6 @@
 masters=$1
 loadbalancer=$2
+ZONE=`gcloud compute instances list | grep $loadbalancer | awk '{ print $2 }'`
 KUBERNETES_INTERNAL_ADDRESS=$(gcloud compute instances describe --zone=$ZONE $loadbalancer \
   --format 'value(networkInterfaces[0].networkIP)')
 for instance in $(echo $masters | tr ',' ' '); do
