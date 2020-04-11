@@ -24,6 +24,9 @@ sleep 2
 curl -I node02:$NODEPORT
 sleep 10
 kubectl logs $POD_NAME
+sleep 2
+kubectl exec -it $POD_NAME -- nslookup nginx
+sleep 2
 kubectl delete secret kubernetes-the-hard-way
 kubectl delete svc nginx
 kubectl delete deployment nginx
