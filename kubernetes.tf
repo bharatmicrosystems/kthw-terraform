@@ -122,6 +122,16 @@ module "api-server-6443" {
   target_tags = ["k8sloadbalancer"]
 }
 
+module "master-etcdlb" {
+  name        = "master-etcdlb"
+  source        = "./modules/firewall"
+  source_ranges = []
+  source_tags = ["k8smaster"]
+  tcp_ports = ["2379"]
+  udp_ports = []
+  target_tags = ["k8sloadbalancer"]
+}
+
 module "bastion-ssh" {
   name        = "bastion-ssh"
   source        = "./modules/firewall"
@@ -132,8 +142,8 @@ module "bastion-ssh" {
   target_tags = ["bastion"]
 }
 
-module "master-apiserver" {
-  name        = "master-apiserver"
+module "apiserverlb-master" {
+  name        = "apiserverlb-master"
   source        = "./modules/firewall"
   source_ranges = []
   source_tags = ["k8sloadbalancer"]
@@ -142,18 +152,18 @@ module "master-apiserver" {
   target_tags = ["k8smaster"]
 }
 
-module "master-etcd" {
-  name        = "master-etcd"
+module "etcdlb-etcd" {
+  name        = "etcdlb-etcd"
   source        = "./modules/firewall"
   source_ranges = []
-  source_tags = ["k8smaster"]
+  source_tags = ["k8sloadbalancer"]
   tcp_ports = ["2379"]
   udp_ports = []
   target_tags = ["etcd"]
 }
 
 module "etcd-etcd" {
-  name        = "master-etcd"
+  name        = "etcd-etcd"
   source        = "./modules/firewall"
   source_ranges = []
   source_tags = ["etcd"]
