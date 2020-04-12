@@ -42,7 +42,7 @@ sh -x setup-worker.sh $workers
 sleep 1
 echo 'Setting up networking'
 sh -x setup-networking.sh $masters
-sleep 1
+sleep 10
 echo 'Running Smoke test'
 sh -x run-smoke-test.sh $masters $etcds
 sleep 1
