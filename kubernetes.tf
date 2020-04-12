@@ -42,7 +42,7 @@ module "etcd01" {
   instance_zone = "${var.region}-a"
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
-  tags = ["k8smaster"]
+  tags = ["etcd"]
   startup_script = ""
 }
 module "etcd02" {
@@ -52,7 +52,7 @@ module "etcd02" {
   instance_zone = "${var.region}-b"
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
-  tags = ["k8smaster"]
+  tags = ["etcd"]
   startup_script = ""
 }
 module "etcd03" {
@@ -62,7 +62,7 @@ module "etcd03" {
   instance_zone = "${var.region}-c"
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
-  tags = ["k8smaster"]
+  tags = ["etcd"]
   startup_script = ""
 }
 
@@ -147,9 +147,19 @@ module "master-etcd" {
   source        = "./modules/firewall"
   source_ranges = []
   source_tags = ["k8smaster"]
+  tcp_ports = ["2379"]
+  udp_ports = []
+  target_tags = ["etcd"]
+}
+
+module "etcd-etcd" {
+  name        = "master-etcd"
+  source        = "./modules/firewall"
+  source_ranges = []
+  source_tags = ["etcd"]
   tcp_ports = ["2379-2380"]
   udp_ports = []
-  target_tags = ["k8smaster"]
+  target_tags = ["etcd"]
 }
 
 module "allow-ssh-from-bastion" {
