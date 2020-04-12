@@ -19,7 +19,7 @@ echo 'Setting up NGINX Load Balancer'
 sh -x setup-nginx.sh $loadbalancer $masters $etcds
 sleep 1
 echo 'Distributing certs'
-sh -x distribute-certs.sh $masters $workers $etcd
+sh -x distribute-certs.sh $masters $workers $etcds
 sleep 1
 echo 'Distributing kubeconfig'
 sh -x distribute-kubeconfig.sh $masters $workers
