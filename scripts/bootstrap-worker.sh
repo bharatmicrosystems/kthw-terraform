@@ -1,7 +1,8 @@
 {
   sudo yum -y install socat conntrack ipset wget
 }
-sudo swapoff -a
+sudo su - << BLOCK
+swapoff -a
 sed -i 's/enforcing/permissive/g' /etc/selinux/config
 setenforce 0
 cat <<EOF >  /etc/sysctl.d/k8s.conf
@@ -10,6 +11,7 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl --system
 echo 1 > /proc/sys/net/ipv4/ip_forward
+BLOCK
 wget \
   https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.15.0/crictl-v1.15.0-linux-amd64.tar.gz \
   https://storage.googleapis.com/kubernetes-the-hard-way/runsc \
