@@ -27,3 +27,6 @@ kubectl get pods
 POD_NAME=$(kubectl get pods -l run=busybox -o jsonpath="{.items[0].metadata.name}")
 sleep 10
 kubectl exec -ti $POD_NAME -- nslookup kubernetes
+echo 'Test secret encryption'
+kubectl create secret generic kubernetes-the-hard-way --from-literal="mykey=mydata"
+sleep 5
