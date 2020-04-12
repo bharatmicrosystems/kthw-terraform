@@ -43,6 +43,6 @@ echo 'Setting up networking'
 sh -x setup-networking.sh $masters
 sleep 1
 echo 'Running Smoke test'
-sh -x run-smoke-test.sh $masters
+sh -x run-smoke-test.sh $masters $etcds
 sleep 1
 echo 'Done...'
