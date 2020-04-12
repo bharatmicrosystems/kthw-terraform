@@ -50,7 +50,7 @@ cat > ${instance}-csr.json <<EOF
   ]
 }
 EOF
-ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
+ZONE=`gcloud compute instances list --filter="name=${instance}"| grep ${instance} | awk '{ print $2 }'`
 #EXTERNAL_IP=$(gcloud compute instances describe --zone=$ZONE ${instance} --zone=$ZONE\
 #  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
 INTERNAL_IP=$(gcloud compute instances describe --zone=$ZONE ${instance} \
@@ -187,7 +187,7 @@ cfssl gencert \
 ETCD_INTERNAL_ADDRESS=`gcloud compute addresses list --filter="name=$loadbalancer"| grep $loadbalancer | awk '{ print $2 }'`
 ETCD_HOSTNAMES=$etcds
 for instance in $(echo $etcds | tr ',' ' '); do
-  ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
+  ZONE=`gcloud compute instances list --filter="name=${instance}"| grep ${instance} | awk '{ print $2 }'`
   ETCD_INTERNAL_IP=$(gcloud compute instances describe --zone=$ZONE ${instance} \
     --format 'value(networkInterfaces[0].networkIP)')
   ETCD_INTERNAL_IPS="${ETCD_INTERNAL_IPS},${ETCD_INTERNAL_IP}"

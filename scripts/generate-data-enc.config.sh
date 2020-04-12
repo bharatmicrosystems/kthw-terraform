@@ -14,6 +14,6 @@ resources:
       - identity: {}
 EOF
 for instance in $(echo $masters | tr ',' ' '); do
-  ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
+  ZONE=`gcloud compute instances list --filter="name=${instance}"| grep ${instance} | awk '{ print $2 }'`
   gcloud compute scp --zone=$ZONE --internal-ip encryption-config.yaml ${instance}:~/
 done
