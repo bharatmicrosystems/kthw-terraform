@@ -1,7 +1,7 @@
 masters=$1
 workers=$2
 loadbalancer=$3
-
+etcds=$4
 #Admin cert
 {
 cat > admin-csr.json <<EOF
@@ -186,6 +186,47 @@ cfssl gencert \
   kubernetes-csr.json | cfssljson -bare kubernetes
 }
 
+# ETCD
+{
+ZONE=`gcloud compute instances list | grep $loadbalancer | awk '{ print $2 }'`
+ETCD_PUBLIC_ADDRESS=$(gcloud compute instances describe --zone=$ZONE $loadbalancer \
+  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
+ETCD_INTERNAL_ADDRESS=$(gcloud compute instances describe --zone=$ZONE $loadbalancer \
+  --format 'value(networkInterfaces[0].networkIP)')
+ETCD_HOSTNAMES=$etcds
+for instance in $(echo $etcds | tr ',' ' '); do
+  ETCD_INTERNAL_IP=$(gcloud compute instances describe --zone=$ZONE ${instance} \
+    --format 'value(networkInterfaces[0].networkIP)')
+  ETCD_INTERNAL_IPS="${ETCD_INTERNAL_IPS},${ETCD_INTERNAL_IP}"
+done
+ETCD_INTERNAL_IPS=$(echo $ETCD_INTERNAL_IPS | sed 's/^,//')
+cat > etcd-csr.json <<EOF
+{
+  "CN": "ETCD",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "Kubernetes",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=$loadbalancer,127.0.0.1,${etcds},${ETCD_INTERNAL_IPS},${ETCD_PUBLIC_ADDRESS},${ETCD_INTERNAL_ADDRESS} \
+  -profile=kubernetes \
+  kubernetes-csr.json | cfssljson -bare kubernetes
+}
+
 # Service account key pair
 
 {
@@ -214,4 +255,3 @@ cfssl gencert \
   -profile=kubernetes \
   service-account-csr.json | cfssljson -bare service-account
 }
-

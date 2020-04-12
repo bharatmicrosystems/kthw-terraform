@@ -1,3 +1,4 @@
+ETCD_HOSTS=$1
 sudo yum install -y wget
 wget  "https://github.com/etcd-io/etcd/releases/download/v3.4.0/etcd-v3.4.0-linux-amd64.tar.gz"
 {
@@ -12,9 +13,11 @@ wget  "https://github.com/etcd-io/etcd/releases/download/v3.4.0/etcd-v3.4.0-linu
 INTERNAL_IP=$(curl -s -H "Metadata-Flavor: Google" \
   http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
 ETCD_NAME=$(hostname -s)
-MASTER_01_IP=master01
-MASTER_02_IP=master02
-MASTER_03_IP=master03
+#Build the initial-clutser String
+for instance in $(echo $ETCD_HOSTS | tr ',' ' '); do
+  INITIAL_CLUSTER_STRING="${INITIAL_CLUSTER_STRING},${instance}=https://${instance}:2380"
+done
+INITIAL_CLUSTER_STRING=$(echo $INITIAL_CLUSTER_STRING | sed 's/^,//')
 cat <<EOF | sudo tee /etc/systemd/system/etcd.service
 [Unit]
 Description=etcd
@@ -37,7 +40,7 @@ ExecStart=/usr/local/bin/etcd \\
   --listen-client-urls https://${INTERNAL_IP}:2379,https://127.0.0.1:2379 \\
   --advertise-client-urls https://${INTERNAL_IP}:2379 \\
   --initial-cluster-token etcd-cluster-0 \\
-  --initial-cluster master01=https://${MASTER_01_IP}:2380,master02=https://${MASTER_02_IP}:2380,master03=https://${MASTER_03_IP}:2380 \\
+  --initial-cluster $INITIAL_CLUSTER_STRING \\
   --initial-cluster-state new \\
   --data-dir=/var/lib/etcd
 Restart=on-failure

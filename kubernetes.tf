@@ -35,6 +35,37 @@ module "master03" {
   startup_script = ""
 }
 
+module "etcd01" {
+  source        = "./modules/instance"
+  instance_name = "etcd01"
+  instance_machine_type = "n1-standard-1"
+  instance_zone = "${var.region}-a"
+  instance_image = "centos-7-v20191014"
+  subnet_name = "default"
+  tags = ["k8smaster"]
+  startup_script = ""
+}
+module "etcd02" {
+  source        = "./modules/instance"
+  instance_name = "etcd02"
+  instance_machine_type = "n1-standard-1"
+  instance_zone = "${var.region}-b"
+  instance_image = "centos-7-v20191014"
+  subnet_name = "default"
+  tags = ["k8smaster"]
+  startup_script = ""
+}
+module "etcd03" {
+  source        = "./modules/instance"
+  instance_name = "etcd03"
+  instance_machine_type = "n1-standard-1"
+  instance_zone = "${var.region}-c"
+  instance_image = "centos-7-v20191014"
+  subnet_name = "default"
+  tags = ["k8smaster"]
+  startup_script = ""
+}
+
 module "node01" {
   source        = "./modules/instance"
   instance_name = "node01"
