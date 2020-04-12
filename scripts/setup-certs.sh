@@ -153,11 +153,7 @@ cfssl gencert \
 
 # Kube API Server
 {
-ZONE=`gcloud compute instances list | grep $loadbalancer | awk '{ print $2 }'`
-KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute instances describe --zone=$ZONE $loadbalancer \
-  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
-KUBERNETES_INTERNAL_ADDRESS=$(gcloud compute instances describe --zone=$ZONE $loadbalancer \
-  --format 'value(networkInterfaces[0].networkIP)')
+KUBERNETES_INTERNAL_ADDRESS=`gcloud compute addresses list --filter="name=$loadbalancer"| grep $loadbalancer | awk '{ print $2 }'`
 KUBERNETES_HOSTNAMES=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local,$masters
 cat > kubernetes-csr.json <<EOF
 {
@@ -181,18 +177,14 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=10.32.0.1,${KUBERNETES_PUBLIC_ADDRESS},${KUBERNETES_INTERNAL_ADDRESS},$loadbalancer,127.0.0.1,${KUBERNETES_HOSTNAMES} \
+  -hostname=10.32.0.1,${KUBERNETES_INTERNAL_ADDRESS},127.0.0.1,${KUBERNETES_HOSTNAMES} \
   -profile=kubernetes \
   kubernetes-csr.json | cfssljson -bare kubernetes
 }
 
 # ETCD
 {
-ZONE=`gcloud compute instances list | grep $loadbalancer | awk '{ print $2 }'`
-ETCD_PUBLIC_ADDRESS=$(gcloud compute instances describe --zone=$ZONE $loadbalancer \
-  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
-ETCD_INTERNAL_ADDRESS=$(gcloud compute instances describe --zone=$ZONE $loadbalancer \
-  --format 'value(networkInterfaces[0].networkIP)')
+ETCD_INTERNAL_ADDRESS=`gcloud compute addresses list --filter="name=$loadbalancer"| grep $loadbalancer | awk '{ print $2 }'`
 ETCD_HOSTNAMES=$etcds
 for instance in $(echo $etcds | tr ',' ' '); do
   ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
@@ -223,7 +215,7 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=$loadbalancer,127.0.0.1,${etcds},${ETCD_INTERNAL_IPS},${ETCD_PUBLIC_ADDRESS},${ETCD_INTERNAL_ADDRESS} \
+  -hostname=127.0.0.1,${etcds},${ETCD_INTERNAL_IPS},${ETCD_INTERNAL_ADDRESS} \
   -profile=kubernetes \
   etcd-csr.json | cfssljson -bare etcd
 }

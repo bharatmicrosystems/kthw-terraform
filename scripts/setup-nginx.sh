@@ -1,6 +1,15 @@
-loadbalancer=$1
+loadbalancers=$1
 masters=$2
 etcds=$3
-ZONE=`gcloud compute instances list | grep ${loadbalancer} | awk '{ print $2 }'`
-gcloud compute scp --zone=$ZONE --internal-ip configure-nginx.sh $loadbalancer:~/
-gcloud compute ssh --zone=$ZONE --internal-ip $loadbalancer -- "cd ~/ && sh -x configure-nginx.sh $masters $etcds" 
+VIP=$4
+for instance in $(echo $loadbalancers | tr ',' ' '); do
+  ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
+  gcloud compute scp --zone=$ZONE --internal-ip configure-nginx.sh $instance:~/
+  gcloud compute ssh --zone=$ZONE --internal-ip $instance -- "cd ~/ && sh -x configure-nginx.sh $masters $etcds"
+done
+
+for instance in $(echo $loadbalancers | tr ',' ' '); do
+  ZONE=`gcloud compute instances list --filter="name=${instance}"|grep ${instance} | awk '{ print $2 }'`
+  gcloud compute scp --zone=$ZONE --internal-ip assign-vip.service assign-vip.sh configure-assign-vip.sh ${instance}:~/
+  gcloud compute ssh --zone=$ZONE --internal-ip ${instance} -- "cd ~/ && sh -x configure-assign-vip.sh $VIP"
+done

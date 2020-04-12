@@ -1,11 +1,12 @@
 workers=$1
 loadbalancer=$2
+LB_INTERNAL_ADDRESS=`gcloud compute addresses list --filter="name=$loadbalancer"| grep $loadbalancer | awk '{ print $2 }'`
 #Kubeconfig file for worker nodes
 for instance in $(echo $workers | tr ',' ' '); do
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
-    --server=https://$loadbalancer:6443 \
+    --server=https://${LB_INTERNAL_ADDRESS}:6443 \
     --kubeconfig=${instance}.kubeconfig
 
   kubectl config set-credentials system:node:${instance} \
@@ -27,7 +28,7 @@ done
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
-    --server=https://$loadbalancer:6443 \
+    --server=https://$LB_INTERNAL_ADDRESS:6443 \
     --kubeconfig=kube-proxy.kubeconfig
 
   kubectl config set-credentials system:kube-proxy \
@@ -49,7 +50,7 @@ done
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
-    --server=https://masterlb:6443 \
+    --server=https://${LB_INTERNAL_ADDRESS}:6443 \
     --kubeconfig=kube-controller-manager.kubeconfig
 
   kubectl config set-credentials system:kube-controller-manager \
@@ -71,7 +72,7 @@ done
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
-    --server=https://masterlb:6443 \
+    --server=https://${LB_INTERNAL_ADDRESS}:6443 \
     --kubeconfig=kube-scheduler.kubeconfig
 
   kubectl config set-credentials system:kube-scheduler \
@@ -94,7 +95,7 @@ done
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
-    --server=https://masterlb:6443 \
+    --server=https://${LB_INTERNAL_ADDRESS}:6443 \
     --kubeconfig=admin.kubeconfig
 
   kubectl config set-credentials admin \

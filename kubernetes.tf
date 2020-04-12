@@ -96,8 +96,27 @@ module "masterlb" {
   instance_image = "centos-7-v20191014"
   tags = ["k8sloadbalancer"]
   subnet_name = "default"
-  startup_script = ""
-  scopes = []
+  startup_script = "sudo yum install -y git wget && wget https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/bin/"
+  scopes = ["compute-rw","storage-rw"]
+}
+
+module "masterlb-dr" {
+  source        = "./modules/instance-external"
+  instance_name = "masterlb-dr"
+  instance_machine_type = "n1-standard-1"
+  instance_zone = "${var.region}-a"
+  instance_image = "centos-7-v20191014"
+  tags = ["k8sloadbalancer"]
+  subnet_name = "default"
+  startup_script = "sudo yum install -y git wget && wget https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/bin/"
+  scopes = ["compute-rw","storage-rw"]
+}
+
+resource "google_compute_address" "masterlb-vip" {
+  name         = "masterlb-vip"
+  subnetwork   = "default"
+  address_type = "INTERNAL"
+  region       = var.region
 }
 
 module "bastion" {
