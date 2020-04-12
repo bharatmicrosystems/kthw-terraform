@@ -195,6 +195,7 @@ ETCD_INTERNAL_ADDRESS=$(gcloud compute instances describe --zone=$ZONE $loadbala
   --format 'value(networkInterfaces[0].networkIP)')
 ETCD_HOSTNAMES=$etcds
 for instance in $(echo $etcds | tr ',' ' '); do
+  ZONE=`gcloud compute instances list | grep ${instance} | awk '{ print $2 }'`
   ETCD_INTERNAL_IP=$(gcloud compute instances describe --zone=$ZONE ${instance} \
     --format 'value(networkInterfaces[0].networkIP)')
   ETCD_INTERNAL_IPS="${ETCD_INTERNAL_IPS},${ETCD_INTERNAL_IP}"
@@ -224,7 +225,7 @@ cfssl gencert \
   -config=ca-config.json \
   -hostname=$loadbalancer,127.0.0.1,${etcds},${ETCD_INTERNAL_IPS},${ETCD_PUBLIC_ADDRESS},${ETCD_INTERNAL_ADDRESS} \
   -profile=kubernetes \
-  kubernetes-csr.json | cfssljson -bare kubernetes
+  etcd-csr.json | cfssljson -bare etcd
 }
 
 # Service account key pair

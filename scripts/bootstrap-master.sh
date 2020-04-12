@@ -1,4 +1,11 @@
 INTERNAL_IP=$1
+LOAD_BALANCER=$2
+#ETCD_HOSTS=$2
+sudo yum install -y wget
+#for instance in $(echo $ETCD_HOSTS | tr ',' ' '); do
+#  INITIAL_CLUSTER_STRING="${INITIAL_CLUSTER_STRING},https://${instance}:2379"
+#done
+#INITIAL_CLUSTER_STRING=$(echo $INITIAL_CLUSTER_STRING | sed 's/^,//')
 sudo mkdir -p /etc/kubernetes/config
 wget \
   "https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kube-apiserver" \
@@ -14,7 +21,7 @@ wget \
 {
   sudo mkdir -p /var/lib/kubernetes/
 
-  sudo mv ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
+  sudo mv ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem etcd.pem etcd-key.pem \
     service-account-key.pem service-account.pem \
     encryption-config.yaml /var/lib/kubernetes/
 }
@@ -37,9 +44,9 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --client-ca-file=/var/lib/kubernetes/ca.pem \\
   --enable-admission-plugins=NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \\
   --etcd-cafile=/var/lib/kubernetes/ca.pem \\
-  --etcd-certfile=/var/lib/kubernetes/kubernetes.pem \\
-  --etcd-keyfile=/var/lib/kubernetes/kubernetes-key.pem \\
-  --etcd-servers=https://masterlb:2379 \\
+  --etcd-certfile=/var/lib/kubernetes/etcd.pem \\
+  --etcd-keyfile=/var/lib/kubernetes/etcd-key.pem \\
+  --etcd-servers=https://${LOAD_BALANCER}:2379 \\
   --event-ttl=1h \\
   --encryption-provider-config=/var/lib/kubernetes/encryption-config.yaml \\
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \\
@@ -118,6 +125,7 @@ EOF
   sudo systemctl daemon-reload
   sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
   sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
+  sudo systemctl restart kube-apiserver kube-controller-manager kube-scheduler
 }
 sleep 10
 #Test
