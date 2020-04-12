@@ -104,7 +104,7 @@ module "masterlb-dr" {
   source        = "./modules/instance-external"
   instance_name = "masterlb-dr"
   instance_machine_type = "n1-standard-1"
-  instance_zone = "${var.region}-a"
+  instance_zone = "${var.region}-b"
   instance_image = "centos-7-v20191014"
   tags = ["k8sloadbalancer"]
   subnet_name = "default"
