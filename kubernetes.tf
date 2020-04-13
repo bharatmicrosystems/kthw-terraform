@@ -151,7 +151,7 @@ module "master-etcdlb" {
   target_tags = ["k8sloadbalancer"]
 }
 
-module "bastion-ssh" {
+module "internet-bastion-ssh" {
   name        = "bastion-ssh"
   source        = "./modules/firewall"
   source_ranges = var.source_ranges
@@ -221,8 +221,8 @@ module "worker-nodeport" {
   target_tags = ["k8sworker"]
 }
 
-module "worker-allow-weave-coredns" {
-  name        = "worker-allow-weave-coredns"
+module "worker-allow-weave" {
+  name        = "worker-allow-weave"
   source        = "./modules/firewall"
   source_ranges = []
   source_tags = ["k8sworker"]
