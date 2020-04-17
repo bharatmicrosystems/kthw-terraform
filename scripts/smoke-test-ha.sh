@@ -1,8 +1,8 @@
 #!/bin/bash
 internal=false
 external=false
-healthz=":80/"
-while getopts ":i:e:l:h:" opt; do
+healthz=":80\/nginx_status"
+while getopts ":i:e:l:" opt; do
     case "$opt" in
     i)  internal_vip=$OPTARG
         internal=true
@@ -12,8 +12,6 @@ while getopts ":i:e:l:h:" opt; do
         ;;
     l)  loadbalancers=$OPTARG
         lb=true
-        ;;
-    h)  healthz=$OPTARG
     esac
 done
 
