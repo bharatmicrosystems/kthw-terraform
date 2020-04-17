@@ -61,7 +61,7 @@ elif [ "stop" == "$param" ] ; then
   systemctl stop nginx
   exit 0
 elif [ "status" == "$param" ] ; then
-  status=$(curl -k -s -o /dev/null -w '%{http_code}' https://localhost$healthz)
+  status=$(curl -s -o /dev/null -w '%{http_code}' http://localhost$healthz)
   if [ $status -eq 200 ]; then
     echo "NGINX Running"
     exit 0
@@ -70,7 +70,7 @@ elif [ "status" == "$param" ] ; then
     exit 7
   fi
 elif [ "monitor" == "$param" ] ; then
-  status=$(curl -k -s -o /dev/null -w '%{http_code}' https://localhost$healthz)
+  status=$(curl -s -o /dev/null -w '%{http_code}' http://localhost$healthz)
   if [ $status -eq 200 ]; then
     echo "NGINX Running"
     exit 0
