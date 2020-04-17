@@ -1,7 +1,7 @@
 #!/bin/bash
 internal=false
 external=false
-healthz=":80\/nginx_status"
+healthz=":80/nginx_status"
 while getopts ":i:e:l:" opt; do
     case "$opt" in
     i)  internal_vip=$OPTARG
