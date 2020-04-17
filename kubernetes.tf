@@ -234,3 +234,12 @@ module "worker-allow-weave" {
   udp_ports = ["6783","6784"]
   target_tags = ["k8sworker"]
 }
+module "allow-lb-lb" {
+  name        = "allow-lb-lb"
+  source        = "./modules/firewall"
+  source_ranges = []
+  source_tags = ["k8sloadbalancer"]
+  tcp_ports = []
+  udp_ports = ["5404-5406"]
+  target_tags = ["k8sloadbalancer"]
+}
