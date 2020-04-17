@@ -4,7 +4,7 @@ sudo rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-cento
 sudo yum install -y nginx telnet
 sudo setenforce 0
 sudo sed -i 's/enforcing/permissive/g' /etc/selinux/config
-sudo systemctl enable nginx
+#sudo systemctl enable nginx
 sudo mkdir -p /etc/nginx/tcpconf.d
 sudo chmod 666 /etc/nginx/nginx.conf
 sudo sed -i "s/1024/999999/g" /etc/nginx/nginx.conf
