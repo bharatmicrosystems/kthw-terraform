@@ -89,7 +89,7 @@ module "node02" {
 }
 
 module "masterlb" {
-  source        = "./modules/instance-external"
+  source        = "./modules/instance"
   instance_name = "masterlb"
   instance_machine_type = "n1-standard-1"
   instance_zone = "${var.region}-a"
@@ -101,7 +101,7 @@ module "masterlb" {
 }
 
 module "masterlb-dr" {
-  source        = "./modules/instance-external"
+  source        = "./modules/instance"
   instance_name = "masterlb-dr"
   instance_machine_type = "n1-standard-1"
   instance_zone = "${var.region}-b"
