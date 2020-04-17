@@ -17,7 +17,7 @@ resource "google_compute_instance" "main" {
   metadata_startup_script = var.startup_script
 
   service_account {
-    scopes = ["storage-rw"]
+    scopes = var.scopes
   }
 
   allow_stopping_for_update = true

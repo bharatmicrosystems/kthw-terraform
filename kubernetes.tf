@@ -13,6 +13,7 @@ module "master01" {
   subnet_name = "default"
   tags = ["k8smaster"]
   startup_script = ""
+  scopes = ["storage-rw"]
 }
 module "master02" {
   source        = "./modules/instance"
@@ -23,6 +24,7 @@ module "master02" {
   subnet_name = "default"
   tags = ["k8smaster"]
   startup_script = ""
+  scopes = ["storage-rw"]
 }
 module "master03" {
   source        = "./modules/instance"
@@ -33,6 +35,7 @@ module "master03" {
   subnet_name = "default"
   tags = ["k8smaster"]
   startup_script = ""
+  scopes = ["storage-rw"]
 }
 
 module "etcd01" {
@@ -44,6 +47,7 @@ module "etcd01" {
   subnet_name = "default"
   tags = ["etcd"]
   startup_script = ""
+  scopes = ["storage-rw"]
 }
 module "etcd02" {
   source        = "./modules/instance"
@@ -54,6 +58,7 @@ module "etcd02" {
   subnet_name = "default"
   tags = ["etcd"]
   startup_script = ""
+  scopes = ["storage-rw"]
 }
 module "etcd03" {
   source        = "./modules/instance"
@@ -64,6 +69,7 @@ module "etcd03" {
   subnet_name = "default"
   tags = ["etcd"]
   startup_script = ""
+  scopes = ["storage-rw"]
 }
 
 module "node01" {
@@ -75,6 +81,7 @@ module "node01" {
   subnet_name = "default"
   tags = ["k8sworker"]
   startup_script = ""
+  scopes = ["storage-rw"]
 }
 
 module "node02" {
@@ -86,6 +93,7 @@ module "node02" {
   subnet_name = "default"
   tags = ["k8sworker"]
   startup_script = ""
+  scopes = ["storage-rw"]
 }
 
 module "masterlb" {

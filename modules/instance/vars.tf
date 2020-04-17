@@ -8,3 +8,6 @@ variable "startup_script" {}
 variable "tags" {
   type = list(string)
 }
+variable "scopes" {
+  type = list(string)
+}
