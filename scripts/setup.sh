@@ -20,6 +20,9 @@ sleep 1
 echo 'Setting up NGINX Load Balancer'
 sh -x setup-nginx.sh $loadbalancers $masters $etcds
 sleep 1
+echo 'Setting up HA between NGINX Load Balancers'
+sh -x setup-gcp-failoverd.sh -i $internal_vip -e $external_vip -l $loadbalancers -c "k8scluster" -h ":80\/nginx_status"
+sleep 1
 echo 'Distributing certs'
 sh -x distribute-certs.sh $masters $workers $etcds
 sleep 1
@@ -35,9 +38,6 @@ sleep 1
 echo 'Setting up Control Plane'
 sh -x setup-master.sh $masters $internal_vip
 sleep 1
-echo 'Setting up HA between NGINX Load Balancers'
-sh -x setup-gcp-failoverd.sh -i $internal_vip -e $external_vip -l $loadbalancers -c "k8scluster" -h ":80\/nginx_status"
-sleep 10
 echo 'Setting up RBAC'
 sh -x setup-rbac.sh $masters
 sleep 1
