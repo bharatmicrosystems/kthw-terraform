@@ -209,7 +209,7 @@ module "allow-ssh-from-bastion" {
   source_ranges = []
   source_tags = ["bastion"]
   target_tags = []
-  tcp_ports = ["22"]
+  tcp_ports = ["22","80"]
   udp_ports = []
 }
 
