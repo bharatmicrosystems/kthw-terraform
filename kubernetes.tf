@@ -112,7 +112,7 @@ module "masterlb-dr" {
   scopes = ["compute-rw","storage-rw"]
 }
 
-resource "google_compute_address" "masterlb-interanl-vip" {
+resource "google_compute_address" "masterlb-internal-vip" {
   name         = "masterlb-internal-vip"
   subnetwork   = "default"
   address_type = "INTERNAL"

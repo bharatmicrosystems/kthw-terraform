@@ -1,5 +1,5 @@
-if [ "$#" -ne 5 ]; then
-  echo "Usage: $0 MASTERS WORKERS LOAD_BALANCER ETCDS internal_vip" >&2
+if [ "$#" -lt 5 ]; then
+  echo "Usage: $0 MASTERS WORKERS LOAD_BALANCER ETCDS internal_vip [external_vip]" >&2
   exit 1
 fi
 masters=$1
