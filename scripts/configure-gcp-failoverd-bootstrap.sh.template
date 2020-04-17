@@ -1,0 +1,8 @@
+#!/bin/bash
+#On primary only
+sudo pcs cluster auth #PRIMARY_IP #SECONDARY_IPS -u hacluster -p #PASSWORD
+sudo pcs cluster setup --name #CLUSTER_NAME #PRIMARY_IP#SECONDARY_IPS
+sudo pcs cluster start --all
+sudo pcs status corosync
+sudo pcs cluster status
+sudo pcs property set stonith-enabled=false
