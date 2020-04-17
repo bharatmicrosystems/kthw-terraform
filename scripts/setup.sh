@@ -18,10 +18,7 @@ echo 'Setting up kubeconfig'
 sh -x generate-kubeconfig.sh $workers $internal_vip
 sleep 1
 echo 'Setting up NGINX Load Balancer'
-sh -x setup-nginx.sh $loadbalancers $masters $etcds
-sleep 1
-echo 'Setting up HA between NGINX Load Balancers'
-sh -x setup-gcp-failoverd.sh -i $internal_vip -e $external_vip -l $loadbalancers -c "k8scluster" -h ":80\/nginx_status"
+sh -x setup-nginx.sh $loadbalancers $masters $etcds $internal_vip $external_vip
 sleep 1
 echo 'Distributing certs'
 sh -x distribute-certs.sh $masters $workers $etcds
