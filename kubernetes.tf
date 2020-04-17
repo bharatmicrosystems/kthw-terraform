@@ -112,11 +112,15 @@ module "masterlb-dr" {
   scopes = ["compute-rw","storage-rw"]
 }
 
-resource "google_compute_address" "masterlb-vip" {
-  name         = "masterlb-vip"
+resource "google_compute_address" "masterlb-interanl-vip" {
+  name         = "masterlb-internal-vip"
   subnetwork   = "default"
   address_type = "INTERNAL"
   region       = var.region
+}
+
+resource "google_compute_address" "masterlb-external-vip" {
+  name         = "masterlb-external-vip"
 }
 
 module "bastion" {
