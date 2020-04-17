@@ -80,6 +80,6 @@ for instance in $(echo $loadbalancers | tr ',' ' '); do
   gcloud compute ssh --zone=$ZONE --internal-ip ${instance} -- "cd ~/ && sh -x configure-gcp-failoverd-start.sh"
 done
 
-echo "Sleeping for 10 secs before firing test..."
-sleep 10
-sh smoke-test-ha.sh -i $internal_vip -e $external_vip -l $loadbalancers
+#echo "Sleeping for 10 secs before firing test..."
+#sleep 10
+#sh smoke-test-ha.sh -i $internal_vip -e $external_vip -l $loadbalancers
