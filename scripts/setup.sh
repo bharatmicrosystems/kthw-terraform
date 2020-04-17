@@ -18,7 +18,7 @@ echo 'Setting up kubeconfig'
 sh -x generate-kubeconfig.sh $workers $internal_vip
 sleep 1
 echo 'Setting up NGINX Load Balancer'
-sh -x setup-nginx.sh $loadbalancers $masters $etcds $internal_vip
+sh -x setup-nginx.sh $loadbalancers $masters $etcds
 sleep 1
 echo 'Distributing certs'
 sh -x distribute-certs.sh $masters $workers $etcds

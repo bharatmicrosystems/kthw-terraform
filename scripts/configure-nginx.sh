@@ -8,7 +8,7 @@ sudo systemctl enable nginx
 sudo mkdir -p /etc/nginx/tcpconf.d
 sudo chmod 666 /etc/nginx/nginx.conf
 sudo sed -i "s/1024/999999/g" /etc/nginx/nginx.conf
-sudo cat << EOF | sudo tee /etc/nginx/nginx.conf
+sudo cat << EOF >> /etc/nginx/nginx.conf
 server {
     listen 127.0.0.1:80;
     server_name 127.0.0.1;
