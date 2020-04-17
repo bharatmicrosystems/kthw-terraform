@@ -37,7 +37,9 @@ sh -x setup-master.sh $masters $internal_vip
 sleep 1
 echo 'Setting up HA between NGINX Load Balancers'
 sh -x setup-gcp-failoverd.sh -i $internal_vip -e $external_vip -l $loadbalancers -c k8scluster -h :6443/version
-sleep 1
+sleep 10
+#Test
+kubectl get componentstatuses --kubeconfig admin.kubeconfig
 echo 'Setting up RBAC'
 sh -x setup-rbac.sh $masters
 sleep 1

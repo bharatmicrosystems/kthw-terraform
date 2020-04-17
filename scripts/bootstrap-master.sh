@@ -127,6 +127,3 @@ EOF
   sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
   sudo systemctl restart kube-apiserver kube-controller-manager kube-scheduler
 }
-sleep 10
-#Test
-kubectl get componentstatuses --kubeconfig admin.kubeconfig
