@@ -42,5 +42,5 @@ for instance in $(echo $etcds | tr ',' ' '); do
   sudo sed -i "s/#ph/server ${instance}:2379;\n    #ph/g" /etc/nginx/tcpconf.d/etcd.conf
 done
 
-sudo systemctl start nginx
-sudo systemctl status nginx
+#sudo systemctl start nginx
+#sudo systemctl status nginx
